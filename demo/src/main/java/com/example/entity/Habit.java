@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Data
-
 public class Habit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +25,6 @@ public class Habit {
     private LocalDate createdAt;
 
     @ManyToOne
+    @JoinColumn(name  = "user_id")
     private User user;
 }
