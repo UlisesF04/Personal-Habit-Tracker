@@ -7,6 +7,7 @@ import com.example.dto.LoginRequest;
 import com.example.dto.RegisterRequest;
 import com.example.service.AuthService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid@RequestBody RegisterRequest request) {
         authService.register(request);
         return ResponseEntity.ok("User registered succesfully!");
     }

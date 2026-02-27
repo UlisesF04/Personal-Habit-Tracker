@@ -4,6 +4,7 @@ import com.example.entity.User;
 import com.example.dto.LoginRequest;
 import com.example.dto.RegisterRequest;
 import com.example.repository.UserRepository;
+import com.example.security.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +36,7 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.getRoles().add(Role.USER);
 
         userRepository.save(user);
     }

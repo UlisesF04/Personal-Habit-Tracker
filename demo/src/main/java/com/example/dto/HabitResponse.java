@@ -4,10 +4,12 @@ public class HabitResponse {
     private Long id;
     private String name;
     private String description;
-    public HabitResponse(Long id, String name, String description){
+    private String frequency;
+    public HabitResponse(Long id, String name, String description, String frequency){
         this.id=id;
         this.name=name;
         this.description=description;
+        this.frequency=frequency;
     }
 
     public Long getId(){
@@ -18,5 +20,8 @@ public class HabitResponse {
     }
     public String getDescription(){
         return description;
+    }
+    public String getFrequency(){
+        return frequency;
     }
 }

@@ -8,7 +8,8 @@ public class HabitMapper {
         return new HabitResponse(
             habit.getId(), 
             habit.getName(), 
-            habit.getDescription()
+            habit.getDescription(),
+            habit.getFrequency()
         );
     }
 }

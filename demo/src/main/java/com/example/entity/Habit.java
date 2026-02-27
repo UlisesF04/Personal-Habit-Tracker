@@ -22,6 +22,7 @@ public class Habit {
 
     private String name;
     private String description;
+    private String frequency;
     private LocalDate createdAt;
 
     @ManyToOne
