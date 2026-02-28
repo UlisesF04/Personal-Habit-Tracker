@@ -8,6 +8,8 @@ import com.example.security.Role;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Set;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +38,7 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.getRoles().add(Role.USER);
+        user.setRoles(Set.of(Role.USER));
 
         userRepository.save(user);
     }
