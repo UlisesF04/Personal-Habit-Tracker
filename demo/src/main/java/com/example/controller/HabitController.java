@@ -3,16 +3,28 @@ package com.example.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.dto.DashboardResponse;
 import com.example.dto.HabitRequest;
 import com.example.dto.HabitResponse;
+import com.example.dto.HabitStatsResponse;
 import com.example.entity.Habit;
+import com.example.entity.HabitLog;
 import com.example.entity.User;
 import com.example.exception.ResourceNotFoundException;
 import com.example.mapper.HabitMapper;
+import com.example.repository.HabitLogRepository;
 import com.example.repository.HabitRepository;
 import com.example.repository.UserRepository;
+import com.example.service.HabitService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -31,6 +43,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class HabitController {
     private final UserRepository userRepository;
     private final HabitRepository habitRepository;
+    private final HabitLogRepository habitLogRepository;
+    private final HabitService habitService;
 
     @PostMapping
     public HabitResponse createHabit(
@@ -48,6 +62,44 @@ public class HabitController {
         return HabitMapper.toResponse(saved);
     }
 
+    @PostMapping("/{id}/complete")
+    public Map <String, Object>completeHabit(
+        @PathVariable Long id, 
+        Authentication authentication
+    ) {
+        User user = userRepository
+            .findByUsername(authentication.getName())
+            .orElseThrow(() ->new ResourceNotFoundException("User not found!"));
+        
+        Habit habit = habitRepository
+            .findByIdAndUser(id, user)
+            .orElseThrow(()-> new ResourceNotFoundException("Habit not found for this user!"));
+        
+        LocalDate today= LocalDate.now();
+
+        if(habitLogRepository.existsByHabitAndDate(habit, today)){
+            throw new IllegalStateException("Habit already completed today");
+        }
+        HabitLog log = new HabitLog();
+        log.setHabit(habit);
+        log.setDate(today);
+        habitLogRepository.save(log);
+
+        List<HabitLog> logs =
+            habitLogRepository.findByHabitOrderByDateDesc(habit);
+        
+        int currentStreak = habitService.calculateCurrentStreak(logs);
+        int bestStreak = habitService.calculateBestStreak(logs);
+        String motivation=habitService.motivationMessage(currentStreak);
+
+        return Map.of(
+            "message", motivation,
+            "currentStreak", currentStreak,
+            "bestStreak",bestStreak,
+            "date", today
+        );
+    }
+    
     @GetMapping
     public Page<HabitResponse> getHabits(
         Authentication authentication,
@@ -61,6 +113,20 @@ public class HabitController {
                 .findByUser(user, PageRequest.of(page, size));
         return habits.map(HabitMapper::toResponse);
     }
+
+    @GetMapping("/{id}/stats")
+    public HabitStatsResponse getHabitStats(
+        @PathVariable Long id, 
+        Authentication authentication
+    ){
+        return habitService.getHabitStats(id, authentication.getName());
+    }
+    
+    @GetMapping("/dashboard")
+    public DashboardResponse getDashboard(Authentication authentication) {
+        return habitService.getDashboard(authentication.getName());
+    }
+    
 
     @PutMapping("/{id}")
     public HabitResponse updateHabit(

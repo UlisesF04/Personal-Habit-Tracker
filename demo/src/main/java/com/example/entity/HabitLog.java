@@ -30,8 +30,7 @@ public class HabitLog {
     private Long id;
 
     private LocalDate date;
-    private Boolean completed;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="habit_id",nullable = false)
     private Habit habit;
