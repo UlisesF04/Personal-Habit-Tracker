@@ -7,6 +7,9 @@ import com.example.dto.RegisterRequest;
 import com.example.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +30,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         String token = authService.login(request);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(Map.of("token",token));
     }
 }
