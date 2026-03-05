@@ -1,4 +1,4 @@
-# Habitflow 🔥
+# Personal Habit Tracker 🔥
 
 > A full-stack habit tracking application to build and monitor daily routines.
 
