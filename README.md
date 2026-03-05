@@ -75,12 +75,13 @@ to every request through an Axios interceptor.
 CREATE DATABASE habit_tracker;
 ```
 
-2. Set your credentials in `src/main/resources/application.properties`:
+2. Create a `.env` file in the backend root (same level as `pom.xml`).
+   Use `application.properties.example` as a reference:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/habit_tracker
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+```
+DB_URL=jdbc:mysql://localhost:3306/habit_tracker
+DB_USERNAME=your_mysql_username
+DB_PASSWORD=your_mysql_password
 ```
 
 3. Run the server:
