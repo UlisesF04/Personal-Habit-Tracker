@@ -2,7 +2,7 @@
 
 > A full-stack habit tracking application to build and monitor daily routines.
 
-![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=openjdk)
+![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?style=flat-square&logo=springboot)
 ![React](https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react)
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss)
