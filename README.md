@@ -3,8 +3,8 @@
 > A full-stack habit tracking application to build and monitor daily routines.
 
 ![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?style=flat-square&logo=springboot)
-![React](https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-green?style=flat-square&logo=springboot)
+![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=flat-square&logo=mysql)
 
@@ -25,11 +25,15 @@ Java/Spring Boot on the backend and React on the frontend.
 - Paginated habit listing
 - Responsive UI with smooth animations and transitions
 
+## 🚀 Live Demo
+
+- **Web App:** [https://personal-habit-tracker-khaki.vercel.app](https://personal-habit-tracker-khaki.vercel.app)
+
 ## Tech Stack
 
 ### Backend
 
-- **Java 21** + **Spring Boot 3.2**
+- **Java 21** + **Spring Boot 3.5**
 - **Spring Security** — stateless authentication via **JWT**
 - **Spring Data JPA** + **Hibernate** for persistence
 - **MySQL 8** as the relational database
@@ -38,7 +42,7 @@ Java/Spring Boot on the backend and React on the frontend.
 
 ### Frontend
 
-- **React 18** with functional components and hooks
+- **React 19** with functional components and hooks
 - **Tailwind CSS v4** for utility-first styling
 - **React Router v6** for client-side navigation (SPA)
 - **Axios** with request interceptors to automatically attach the JWT
