@@ -1,4 +1,4 @@
-# Personal Habit Tracker 🔥
+# Personal Habit Tracker
 
 > A full-stack habit tracking application to build and monitor daily routines.
 
@@ -25,7 +25,7 @@ Java/Spring Boot on the backend and React on the frontend.
 - Paginated habit listing
 - Responsive UI with smooth animations and transitions
 
-## 🚀 Live Demo
+## Live Demo
 
 - **Web App:** [https://personal-habit-tracker-khaki.vercel.app](https://personal-habit-tracker-khaki.vercel.app)
 
