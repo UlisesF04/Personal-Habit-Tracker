@@ -91,7 +91,7 @@ DB_PASSWORD=your_mysql_password
 3. Run the server:
 
 ```bash
-cd backend
+cd demo
 ./mvnw spring-boot:run
 ```
 
