@@ -530,7 +530,7 @@ export default function DashboardPage() {
       <div className="db-blob db-blob-2" />
       <div className="db-noise" />
 
-      <header className="db-header">
+      <header className="db-header db-fade-up" style={{ animationDelay: "0s" }}>
         <div className="db-header-inner">
           <div className="db-logo">
             <div className="db-logo-icon">
@@ -554,17 +554,17 @@ export default function DashboardPage() {
         <div className="db-fade-up db-d1" style={{ marginBottom: 32 }}>
           <h1
             style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Poppins', 'Nunito', sans-serif",
               fontSize: 28,
               fontWeight: 800,
-              color: "#fff",
+              color: "#36251E",
               letterSpacing: "-0.03em",
               marginBottom: 4,
             }}
           >
             Hi, {user}!
           </h1>
-          <p style={{ fontSize: 14, color: "#6b7280", fontWeight: 300 }}>
+          <p style={{ fontSize: 14, color: "#7A6458", fontWeight: 600 }}>
             {new Date().toLocaleDateString("es-AR", {
               weekday: "long",
               day: "numeric",
@@ -575,7 +575,7 @@ export default function DashboardPage() {
 
         <p className="db-section-title db-fade-up db-d2">Summary</p>
         {statsLoading ? (
-          <div className="db-stats-grid" style={{ marginBottom: 48 }}>
+          <div className="db-stats-grid db-fade-up db-d3" style={{ marginBottom: 48 }}>
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="db-skeleton" style={{ height: 120 }} />
             ))}
@@ -583,28 +583,28 @@ export default function DashboardPage() {
         ) : (
           <div className="db-stats-grid">
             <StatCard
-              delay={2}
+              delay={3}
               color="cyan"
               icon={<IconLayers />}
               value={stats?.totalHabits ?? 0}
               label="Total habits"
             />
             <StatCard
-              delay={3}
+              delay={4}
               color="emerald"
               icon={<IconCheck />}
               value={stats?.completedToday ?? 0}
               label="Completed today"
             />
             <StatCard
-              delay={4}
+              delay={5}
               color="violet"
               icon={<IconFire />}
               value={stats?.longestStreakOverall ?? 0}
               label="Best streak (days)"
             />
             <StatCard
-              delay={5}
+              delay={6}
               color="amber"
               icon={<IconTrend />}
               value={`${Math.round(stats?.averageConsistencyLast7Days ?? 0)}%`}
@@ -613,7 +613,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="db-habits-header db-fade-up db-d3">
+        <div className="db-habits-header db-fade-up db-d7">
           <p className="db-section-title" style={{ margin: 0 }}>
             My habits
           </p>
@@ -623,13 +623,13 @@ export default function DashboardPage() {
         </div>
 
         {habitsLoading ? (
-          <div className="db-habits-grid">
+          <div className="db-habits-grid db-fade-up db-d8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="db-skeleton" style={{ height: 160 }} />
             ))}
           </div>
         ) : habits.length === 0 ? (
-          <div className="db-habits-grid">
+          <div className="db-habits-grid db-fade-up db-d8">
             <div className="db-empty">
               <div className="db-empty-icon">
                 <IconPlus />
@@ -645,12 +645,12 @@ export default function DashboardPage() {
           </div>
         ) : (
           <>
-            <div className="db-habits-grid">
+            <div className="db-habits-grid db-fade-up db-d8">
               {habits.map((habit, i) => (
                 <HabitCard
                   key={habit.id}
                   habit={habit}
-                  delay={i * 60}
+                  delay={680 + i * 80}
                   onComplete={(h) =>
                     setConfirmModal({ type: "complete", habit: h })
                   }
@@ -663,7 +663,7 @@ export default function DashboardPage() {
             </div>
 
             {totalPages > 1 && (
-              <div className="db-pagination">
+              <div className="db-pagination db-fade-up db-d9">
                 <button
                   className="db-page-btn"
                   disabled={page === 0}

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import AuthPage from "./pages/AuthPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route
             path="/dashboard"
@@ -22,7 +24,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/auth" />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
