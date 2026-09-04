@@ -1,9 +1,19 @@
 spring.application.name=demo
 
+# Local development
 spring.datasource.url=jdbc:mysql://localhost:3306/nombre_de_tu_bd
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_contraseña
 
+# Production (Aiven / Render) — set env vars instead of editing file:
+# DB_URL=jdbc:mysql://<aiven-host>:<port>/defaultdb?sslMode=REQUIRED
+# DB_USERNAME=avnadmin
+# DB_PASSWORD=<aiven-password>
+# JWT_SECRET=<generate: openssl rand -base64 32>
+# PORT=10000 (Render injects automatically)
+
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
+server.port=${PORT:8080}
+app.jwt.secret=${JWT_SECRET:ulises_habit_tracker_super_secret_key_2026_secure}

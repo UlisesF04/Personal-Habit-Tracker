@@ -13,6 +13,8 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("https://personal-habit-tracker-khaki.vercel.app");
+        // Allow any Vercel preview deployments for this project
+        config.addAllowedOriginPattern("https://*.vercel.app");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);

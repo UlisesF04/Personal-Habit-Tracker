@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: habit-tracker-api
+    runtime: docker
+    rootDir: demo
+    dockerfilePath: ./Dockerfile
+    plan: free
+    autoDeploy: false
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DB_URL
+        sync: false # set after Aiven: jdbc:mysql://<host>:<port>/defaultdb?sslMode=REQUIRED
+      - key: DB_USERNAME
+        sync: false # avnadmin
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true # or set: openssl rand -base64 32
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
