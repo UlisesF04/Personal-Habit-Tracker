@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class AdminController {
             .map(u->new UserResponse(
                 u.getId(), 
                 u.getUsername(), 
-                u.getRoles()))
+                Set.of(u.getRole())))
             .toList();
     }
 
