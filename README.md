@@ -7,188 +7,165 @@
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=flat-square&logo=mysql)
+![Vercel](https://img.shields.io/badge/Vercel-deployed-black?style=flat-square&logo=vercel)
+![Render](https://img.shields.io/badge/Render-deployed-46E3B7?style=flat-square&logo=render)
+![Aiven](https://img.shields.io/badge/Aiven-MySQL-FF6B6B?style=flat-square&logo=aiven)
 
 ## What is Personal-Habit-Tracker?
 
 Personal-Habit-Tracker is a web application that allows users to create and track daily habits, with streak monitoring, consistency statistics, and a personalized dashboard. Built as a portfolio project to demonstrate full-stack development skills using Java/Spring Boot on the backend and React on the frontend.
 
+The app helps you turn intentions into streaks: create habits with name, description and frequency, mark them complete each day, and watch current/best streaks, 7/30-day completion rates and dashboard insights grow.
+
 ## Features
 
-- Secure JWT-based authentication (register & login)
-- Full CRUD for personal habits
-- Daily habit completion tracking (one per day)
-- Automatic calculation of current streak and all-time best streak
-- Completion rates (last 7 / 30 days) and consistency metrics
-- General dashboard with key stats (total habits, completed today, longest streak, avg consistency)
-- Paginated habit listing
-- Landing page presenting HabitFlow — the personal tracker for your healthy habits
-- Responsive UI with smooth animations, warm palette `#FAF3E0` / `#36251E` and rounded typography (`Nunito` + `Poppins`)
+- **Landing page** — `HabitFlow — the personal tracker for your healthy habits` with calendar/time and habit creation highlights, CTA `Join In`
+- **Secure JWT authentication** — register & login, `BCrypt` passwords, `1h` stateless JWT
+- **Full CRUD for habits** — name, description, frequency
+- **Daily completion** — one log per habit per day (`habit_log` unique `habit_id+date`)
+- **Streak engine** — automatic `currentStreak` and `bestStreak` (consecutive days)
+- **Statistics** — per-habit `7/30-day` completion rates, `totalCompletions`, dashboard `totalHabits / completedToday / longestStreak / avgConsistency 7d`
+- **Dashboard** — 4 stat cards + habit grid (3→2→1 cols), staggered top-to-bottom entrance, skeletons & toasts
+- **Single-square auth** — centered `28px` rounded square, login (`user+pass`) ↔ register (vanish/scale) animation, strength meter
+- **Paginated habits** — `GET /habits?page&size=6`
+- **Responsive & warm UI** — palette `#FAF3E0` (cream) / `#36251E` (espresso), `Nunito` + `Poppins`, dark landing `#36251E/#FAF3E0` with blended images
 
 ## Live Demo
 
-> **Fill after deployment — leave this block as placeholder:**
+**Try the app online:**
 
-- **Landing + Web App (Vercel):** `https://________________.vercel.app` <!-- TODO: paste Vercel URL after deploy -->
-- **API (Render):** `https://________________.onrender.com` <!-- TODO: paste Render URL -->
-- **Swagger UI:** `https://________________.onrender.com/swagger-ui.html`
-- **Health Check:** `https://________________.onrender.com/actuator/health` → `{"status":"UP"}`
-- **Database:** Aiven MySQL 8 — Free tier (host `...aivencloud.com`)
+- **Web App (Vercel):** **[https://pht-beta.vercel.app/](https://pht-beta.vercel.app/)** — Landing `/` → `Join In` → Auth `/auth` → Dashboard `/dashboard`
+- **API (Render):** `https://personal-habit-tracker-8y5s.onrender.com`
+- **Swagger UI:** `https://personal-habit-tracker-8y5s.onrender.com/swagger-ui.html`
+- **Health Check:** `https://personal-habit-tracker-8y5s.onrender.com/actuator/health`
 
-*Previous demo:* https://personal-habit-tracker-khaki.vercel.app
-
-> **Note:** Free tier services sleep after ~15 min idle. First request may take ~30s to wake up.
+> Free tier sleeps after ~15 min idle — first request may take ~30s to wake up.
 
 ## Tech Stack
 
 ### Backend — `demo/`
 
-- **Java 21** + **Spring Boot 3.5.11**
-- **Spring Security** — stateless JWT (`io.jsonwebtoken:jjwt 0.11.5`, `BCrypt`)
-- **Spring Data JPA + Hibernate 6.6** — `ddl-auto=update`
-- **MySQL 8** — `mysql-connector-j` (local) / **Aiven MySQL 8** (prod)
-- **Spring Boot Actuator** — `health` endpoint for Render
-- **Lombok 1.18.30**
-- **SpringDoc OpenAPI 2.5.0** — Swagger UI
-- Build: **Maven 3.9** (`./mvnw`), Docker `eclipse-temurin:21`
+- **Java 21** + **Spring Boot 3.5.11** + **Maven 3.9** (`./mvnw`)
+- **Spring Security** — stateless JWT via `io.jsonwebtoken:jjwt-api/impl/jackson 0.11.5` (`HS256`, `JWT_SECRET` env, 256-bit key derivation)
+- **Spring Data JPA + Hibernate 6.6** — `ddl-auto=update`, HikariCP
+- **MySQL 8** — `mysql-connector-j 9.6.0` locally / **Aiven MySQL 8** in prod (`sslMode=REQUIRED`)
+- **Spring Boot Actuator** — `/actuator/health` for Render
+- **SpringDoc OpenAPI 2.5.0** — Swagger
+- **Lombok 1.18.30** — `commons-math3` (unused, kept)
+- **Docker** — `eclipse-temurin:21` multi-stage (`demo/Dockerfile`), `render.yaml` IaC
 
 ### Frontend — `habit-tracker-frontend/`
 
-- **React 19.2.0** + **React Router 7.13.1** (SPA, protected `/dashboard`)
-- **Vite 7.3.1** + **@vitejs/plugin-react 5.1**
-- **Tailwind CSS 4.2.1** (`@tailwindcss/vite`) + custom CSS (`AuthPage.css`, `DashboardPage.css`, `LandingPage.css`)
-- **Axios 1.13.6** with interceptors (`Authorization: Bearer <JWT>`, 401 auto-logout)
-- **Context API** for auth (`localStorage` token)
-- Images: `src/assets/calendar_image.png`, `src/assets/habits_image.png`
+- **React 19.2.0** + **React Router 7.13.1** — SPA (`/`, `/auth`, `/dashboard` with `PrivateRoute`)
+- **Vite 7.3.1** + `@vitejs/plugin-react 5.1` + `@tailwindcss/vite 4.2.1`
+- **Tailwind CSS 4.2.1** + custom CSS (`AuthPage.css` single square, `DashboardPage.css` sequential fade, `LandingPage.css` dark `#36251E`)
+- **Axios 1.13.6** — `axiosClient` (`baseURL: VITE_API_URL`, `Bearer` interceptor, `401 → /auth`)
+- **Context API** — `AuthContext` (`localStorage` token/username)
+- **Assets** — `src/assets/calendar_image.png`, `src/assets/habits_image.png` (blended into dark landing via glow + `scale(1.04)`)
 
-### Infrastructure (Free-only portfolio)
+### Infrastructure
 
-- **Frontend:** Vercel (Free) — `vercel.app` domain, `VITE_API_URL` env, `vercel.json` SPA rewrite
-- **Backend:** Render (Free) — Docker, `PORT=10000`, `healthCheckPath: /actuator/health`, `render.yaml` IaC
-- **Database:** Aiven MySQL 8 (Free) — fallback `Neon Postgres Free` (change driver only)
+- **Frontend:** Vercel (`vercel.app`, `vercel.json` SPA rewrite, `VITE_API_URL`)
+- **Backend:** Render Docker (`PORT=10000`, `healthCheckPath: /actuator/health`)
+- **Database:** Aiven MySQL 8 Free (`defaultdb`, SSL) — fallback `Neon Postgres` (change driver only)
 
 ## Architecture
 
-**Backend layered:** `Controllers → Services (streak/stats) → Repositories (JPA) → Entities` + `DTOs` + `HabitMapper` + `JwtAuthFilter`.
+**Backend layered:** `Controller → Service (streak/consistency) → Repository (JPA) → Entity` + `DTO` + `Mapper` + `JwtAuthFilter` + `CorsConfig` (`https://*.vercel.app`).
 
-**Frontend:** `BrowserRouter → AuthProvider → Routes (/ → LandingPage, /auth → AuthPage single square with vanish animation, /dashboard → PrivateRoute)` + `axiosClient` + `LandingPage / DashboardPage`.
+Key logic `HabitService`:
+- `currentStreak` — consecutive logs ending **today** (desc walk, break on gap)
+- `bestStreak` — longest consecutive sequence anywhere
+- `completionRate(days)` — `count ≥ today-days+1 / days *100`
 
-**Auth:** Stateless JWT (1h `app.jwt.expiration-ms`, secret via `JWT_SECRET` env). `JwtAuthFilter` reads `Bearer`, `SecurityConfig` permits `/auth/**`, `/swagger-ui/**`, `/actuator/health`.
+**Frontend:**
+`BrowserRouter → AuthProvider → Routes: / (LandingPage) /auth (AuthPage single square + squareVanishOut/In) /dashboard (PrivateRoute + StatCard/HabitCard/Modals) → axiosClient`.
 
-## Getting Started (Local)
+**Auth:** `POST /auth/register|login → JWT (1h) → localStorage → Bearer → JwtAuthFilter` permits `/auth/**`, `/swagger-ui/**`, `/actuator/health`.
+
+## Getting Started — Local Deployment
 
 ### Prerequisites
 
-- Java 21+ (`java -version` → 21.0.x)
-- Node.js 18+ (`node -v`)
-- MySQL 8 (`mysql --version`)
-- Maven wrapper included (`demo/mvnw`)
+- **Java 21+** — `java -version` → `21.0.12`
+- **Node.js 18+** — `node -v` → `v20+`
+- **MySQL 8** — `mysql --version`
+- **Maven Wrapper** included — `demo/mvnw`
 
-### Backend — Local MySQL
+### Backend
 
 1. Create database:
-```sql
-CREATE DATABASE habit_tracker;
-```
+   ```sql
+   CREATE DATABASE habit_tracker;
+   ```
 
-2. Create `demo/.env` or export env vars. See `demo/src/main/resources/application.properties.example`:
-```
-DB_URL=jdbc:mysql://localhost:3306/habit_tracker
-DB_USERNAME=root
-DB_PASSWORD=ulises2004
-JWT_SECRET=ulises_habit_tracker_super_secret_key_2026_secure
-PORT=8080
-```
+2. Configure env — create `demo/.env` (gitignored) or export vars. See `demo/src/main/resources/application.properties.example`:
+   ```
+   DB_URL=jdbc:mysql://localhost:3306/habit_tracker
+   DB_USERNAME=root
+   DB_PASSWORD=your_mysql_password
+   JWT_SECRET=ulises_habit_tracker_super_secret_key_2026_secure
+   PORT=8080
+   ```
+   > `application.properties` has defaults `DB_URL=jdbc:mysql://localhost:3306/habit_tracker`, `DB_USERNAME=root`, `DB_PASSWORD=ulises2004`, `PORT=8080`. Setting env overrides them. Aiven prod uses `jdbc:mysql://<host>:<port>/defaultdb?sslMode=REQUIRED`.
 
-> `demo/src/main/resources/application.properties` is gitignored and has defaults `${DB_URL:...}` etc. Setting env vars overrides them.
+3. Fix `JAVA_HOME` if you get `not defined correctly`:
+   ```powershell
+   setx JAVA_HOME "C:\Program Files\Java\jdk-21.0.12.1"
+   # restart terminal/VS Code
+   ```
 
-3. Run:
-```bash
-cd demo
-./mvnw spring-boot:run
-# or: $env:JAVA_HOME="C:\Program Files\Java\jdk-21.0.12.1"; ./mvnw spring-boot:run
-```
-Server: `http://localhost:8080` — Swagger: `http://localhost:8080/swagger-ui.html` — Health: `http://localhost:8080/actuator/health`
+4. Run:
+   ```bash
+   cd demo
+   ./mvnw spring-boot:run
+   ```
+   Server `http://localhost:8080` — Swagger `http://localhost:8080/swagger-ui.html` — Health `http://localhost:8080/actuator/health`
 
-Fix `JAVA_HOME` if you get `not defined correctly`:
-```powershell
-setx JAVA_HOME "C:\Program Files\Java\jdk-21.0.12.1"
-# restart terminal/VS Code
-```
-
-### Frontend — Local
+### Frontend
 
 ```bash
 cd habit-tracker-frontend
 npm install
-# optional: create .env
+# optional: point to local backend
 echo "VITE_API_URL=http://localhost:8080" > .env
 npm run dev
 ```
-App: `http://localhost:5173` — Landing at `/`, Auth at `/auth`, Dashboard at `/dashboard` (login required).
+App `http://localhost:5173` — Landing `/`, Auth `/auth` (single square, `Sign up` vanish), Dashboard `/dashboard` (requires login).
 
-## Environment Variables
+### Environment Variables
 
-| Var | Local Example | Production (Render/Vercel) | Description |
-|---|---|---|---|
-| `DB_URL` | `jdbc:mysql://localhost:3306/habit_tracker` | `jdbc:mysql://<aiven-host>:<port>/defaultdb?sslMode=REQUIRED` | JDBC URL (Aiven) |
+| Var | Local Example | Production | Description |
+|-----|---------------|------------|-------------|
+| `DB_URL` | `jdbc:mysql://localhost:3306/habit_tracker` | `jdbc:mysql://<aiven-host>:<port>/defaultdb?sslMode=REQUIRED` | JDBC URL |
 | `DB_USERNAME` | `root` | `avnadmin` | DB user |
-| `DB_PASSWORD` | `ulises2004` | `<aiven-password>` | DB pass |
-| `PORT` | `8080` | `10000` (Render injects) | `server.port` |
-| `JWT_SECRET` | `ulises_habit_tracker_super_secret_key_2026_secure` | `openssl rand -base64 32` | HS256 secret |
-| `VITE_API_URL` | `http://localhost:8080` | `https://habit-tracker-api-xxxx.onrender.com` | Frontend → Backend (Vercel env) |
-
-## Deployment — Step by Step (Free Tier)
-
-### 1. Database — Aiven MySQL 8
-
-1. Go to **aiven.io** → Sign up (GitHub) → *Create Service* → **MySQL 8** → **Free plan** → Region `europe-central` → Create
-2. Wait ~2 min → Service Overview → **Connection Information** → copy `Host`, `Port`, `User` (`avnadmin`), `Password`, `Database` (`defaultdb`)
-3. Build JDBC URL: `jdbc:mysql://<host>:<port>/defaultdb?sslMode=REQUIRED`
-4. Test locally: set `DB_URL/DB_USERNAME/DB_PASSWORD` env → `./mvnw spring-boot:run` → `HikariPool-1 Added connection MySQL 8.0` + `Tomcat started on port 8080`
-5. *(Fallback Postgres)*: Use **neon.tech** → Create Project → copy `psql` URL → change `pom.xml` `mysql-connector-j` → `org.postgresql:postgresql`, update `DB_URL=jdbc:postgresql://...?sslmode=require`
-
-### 2. Backend — Render
-
-1. Go to **render.com** → Sign up via GitHub → **New +** → **Web Service** → Connect repo `Personal-Habit-Tracker`
-2. Settings: **Root Directory:** `demo` — **Runtime:** `Docker` — **Dockerfile Path:** `./Dockerfile` — **Plan:** `Free`
-3. **Build Command** (auto via Docker) — **Health Check Path:** `/actuator/health`
-4. **Environment → Add:**
-   - `DB_URL` = `jdbc:mysql://...aivencloud.com...?sslMode=REQUIRED`
-   - `DB_USERNAME` = `avnadmin`
-   - `DB_PASSWORD` = `<aiven>`
-   - `JWT_SECRET` = `openssl rand -base64 32` (generate locally)
-   - `PORT` = `10000`
-5. **Deploy** → Wait 3-5 min → Copy URL `https://habit-tracker-api-xxxx.onrender.com`
-6. Verify: `https://...onrender.com/actuator/health` → `{"status":"UP"}` and `https://...onrender.com/swagger-ui.html`
-7. CORS already allows `https://*.vercel.app` via `CorsConfig.java:14` (`addAllowedOriginPattern`)
-
-> `render.yaml` at repo root automates this.
-
-### 3. Frontend — Vercel
-
-1. Go to **vercel.com** → Sign up via GitHub → **Add New Project** → Import `Personal-Habit-Tracker` → **Root Directory:** `habit-tracker-frontend` → Framework: `Vite`
-2. **Environment Variables → Add:** `VITE_API_URL` = `https://habit-tracker-api-xxxx.onrender.com` → **Deploy**
-3. Vercel provides `https://personal-habit-tracker-xxxx.vercel.app` — verify `/` Landing → `Join In` → `/auth` single square (login `user+pass`, vanish to register) → login → `/dashboard` stats load.
-4. `vercel.json` at `habit-tracker-frontend/` ensures SPA rewrites.
-
-After deploy, paste URLs into **Live Demo** section above.
+| `DB_PASSWORD` | `ulises2004` | `<aiven-password>` | DB password |
+| `PORT` | `8080` | `10000` (Render) | `server.port` |
+| `JWT_SECRET` | `ulises_habit_tracker_super_secret_key_2026_secure` | `openssl rand -base64 32` | HS256 secret (≥32 chars) |
+| `VITE_API_URL` | `http://localhost:8080` | `https://personal-habit-tracker-8y5s.onrender.com` | Frontend → Backend |
 
 ## API Reference
 
 | Method | Endpoint | Auth | Description |
-|---|---|---|---|
+|--------|----------|------|-------------|
 | POST | `/auth/register` | ❌ | Register a new user |
-| POST | `/auth/login` | ❌ | Login → returns JWT |
-| GET | `/habits` | ✅ | List habits (paginated `?page&size=6`) |
+| POST | `/auth/login` | ❌ | Login → returns `{token}` |
+| GET | `/habits` | ✅ | List habits (paginated `?page=0&size=6`) |
 | POST | `/habits` | ✅ | Create a habit |
 | PUT | `/habits/{id}` | ✅ | Update a habit |
 | DELETE | `/habits/{id}` | ✅ | Delete a habit |
 | POST | `/habits/{id}/complete` | ✅ | Mark habit as completed today |
-| GET | `/habits/{id}/stats` | ✅ | Get individual habit stats |
-| GET | `/habits/dashboard` | ✅ | Get general dashboard summary |
-| GET | `/actuator/health` | ❌ | Render health check |
+| GET | `/habits/{id}/stats` | ✅ | Get stats `currentStreak/bestStreak/totalCompletions/rate7/rate30` |
+| GET | `/habits/dashboard` | ✅ | Get `totalHabits/completedToday/longestStreakOverall/averageConsistencyLast7Days` |
+| GET | `/actuator/health` | ❌ | Health check |
+| GET | `/swagger-ui.html` | ❌ | API docs |
+
+## Deployment (Free Tier Recap)
+
+- **Aiven:** MySQL 8 Free → JDBC `?sslMode=REQUIRED` → `HikariPool` connects
+- **Render:** Root `demo`, Docker, `healthCheckPath: /actuator/health`, env `DB_URL/DB_USERNAME/DB_PASSWORD/JWT_SECRET/PORT`
+- **Vercel:** Root `habit-tracker-frontend`, `VITE_API_URL` → `https://personal-habit-tracker-8y5s.onrender.com`, `vercel.json` rewrites
 
 ## Author
 
-**Ulises Fernandez**  
-[LinkedIn](https://linkedin.com/in/ulises-fernández-a6620a259/)
+**Ulises Fernandez** — [LinkedIn](https://linkedin.com/in/ulises-fernández-a6620a259/)
