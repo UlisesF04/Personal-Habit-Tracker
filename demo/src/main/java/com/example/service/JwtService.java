@@ -1,6 +1,10 @@
 package com.example.service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +22,18 @@ public class JwtService {
     private long expirationMs;
 
     private Key getSignInKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] bytes = secret.getBytes(StandardCharsets.UTF_8);
+        // HMAC-SHA256 requires >= 256 bits (32 bytes). If the configured secret is
+        // shorter (e.g. Render generateValue), derive a 32-byte key via SHA-256 so
+        // login doesn't fail with 184-bit WeakKeyException.
+        if (bytes.length < 32) {
+            try {
+                bytes = MessageDigest.getInstance("SHA-256").digest(bytes);
+            } catch (NoSuchAlgorithmException e) {
+                bytes = Arrays.copyOf(bytes, 32);
+            }
+        }
+        return Keys.hmacShaKeyFor(bytes);
     }
     public String generateToken(String username) {
         return Jwts.builder()
